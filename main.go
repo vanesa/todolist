@@ -5,6 +5,7 @@ import (
     	"html"
     	"log"
     	"net/http"
+	"encoding/json"
 
     	"github.com/gorilla/mux" // mux router from the Gorilla Web Toolkit.
 )
@@ -25,11 +26,19 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func TodoIndex(w. http.ReponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Todo Index!")
+// Simulate a real response and mock out the TodoIndex with static data
+func TodoIndex(w http.ResponseWriter, r *http.Request) {
+	todos := Todos{
+		Todo{Name: "Write presentation"},
+		Todo{Name: "Host meetup"},
+	}
+
+	if err := json.NewEncoder(w).Encode(todos); err != nil {
+		panic(err)
+	}
 }
 
-func TodoShow(w. http.ReponseWriter, r *http.Request) {
+func TodoShow(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	todoId := vars["todoId"]
 	fmt.Fprintln(w, "Todo Show: ", todoId)

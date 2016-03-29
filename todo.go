@@ -2,11 +2,10 @@ package main
 
 import "time"
 
-//  basic Todo model to send and retrieve data
 type Todo struct {
-	Name string
-	Completed bool
-	Due time.Time
+	Name      string    `json:"name"`
+	Completed bool      `json:"completed"`
+	Due       time.Time `json:"due"`
 }
 
 type Todos []Todo
