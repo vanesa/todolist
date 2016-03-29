@@ -30,6 +30,7 @@ func TodoIndex(w. http.ReponseWriter, r *http.Request) {
 }
 
 func TodoShow(w. http.ReponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, )
+	vars := mux.Vars(r)
+	todoId := vars["todoId"]
+	fmt.Fprintln(w, "Todo Show: ", todoId)
 }
