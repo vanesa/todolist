@@ -9,23 +9,35 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
+var httpRequests = prometheus.NewCounter(prometheus.CounterOpts{
+	Name: "todo_http_requests_total",
+	Help: "Number of http requests.",
+})
+
+func init() {
+	prometheus.Register(httpRequests)
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
+	httpRequests.Inc()
 	fmt.Fprintln(w, "Welcome!")
 }
 
 // Simulate a real response and mock out the TodoIndex with static data
 func TodoIndex(w http.ResponseWriter, r *http.Request) {
+	httpRequests.Inc()
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(todos); err != nil {
 		panic(err)
 	}
-
 }
 
 func TodoShow(w http.ResponseWriter, r *http.Request) {
+	httpRequests.Inc()
 	vars := mux.Vars(r)
 	var todoId int
 	var err error
@@ -52,6 +64,7 @@ func TodoShow(w http.ResponseWriter, r *http.Request) {
 }
 
 func TodoCreate(w http.ResponseWriter, r *http.Request) {
+	httpRequests.Inc()
 	var todo Todo
 	// open up the body of the request with a size limit
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
